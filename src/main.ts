@@ -45,7 +45,7 @@ async function run() {
 
     // setup rpm tree
     await exec.exec('rpmdev-setuptree');
-
+    console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
     // Copy spec file from path specFile to /github/home/rpmbuild/SPECS/
     await exec.exec(`cp ${specFile.srcFullPath} ${specFile.destFullPath}`);
 
@@ -56,8 +56,6 @@ async function run() {
     await exec.exec(`ln -s /github/home/rpmbuild/SOURCES/${name}-${version}.tar.gz /github/home/rpmbuild/SOURCES/${name}.tar.gz`);
     process.env.GIT_DIR = oldGitDir;
 
-
-    console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
 
     // Installs additional repositories
     const additionalRepos = core.getInput('additional_repos'); // user input, eg: '["centos-release-scl"]'
