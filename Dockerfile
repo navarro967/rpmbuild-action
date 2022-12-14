@@ -4,6 +4,8 @@ FROM centos:7
 # Copying all contents of rpmbuild repo inside container
 COPY . .
 
+RUN ls -alh /github/workspace
+
 # Installing tools needed for rpmbuild , 
 # depends on BuildRequires field in specfile, (TODO: take as input & install)
 RUN yum install -y rpm-build rpmdevtools gcc make coreutils python git
