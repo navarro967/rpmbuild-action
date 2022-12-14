@@ -58,13 +58,18 @@ async function run() {
 
     // Installs additional repositories
     const additionalRepos = core.getInput('additional_repos'); // user input, eg: '["centos-release-scl"]'
-	if (additionalRepos) {
-		const arr = JSON.parse(additionalRepos);
-		for (let i = 0; i < arr.length; i++) {
-			console.log(`Installing repo': ${arr[i]}`);
-    		await exec.exec(`yum install -y ${arr[i]}`);
-		};
-	}
+    let additionalDefs  = "";
+
+    if(core.getInput('additional_definitions')) 
+      additionalDefs = core.getInput('additional_definitions');
+
+    if (additionalRepos) {
+      const arr = JSON.parse(additionalRepos);
+      for (let i = 0; i < arr.length; i++) {
+        console.log(`Installing repo': ${arr[i]}`);
+          await exec.exec(`yum install -y ${arr[i]}`);
+      };
+    }
 
 	// Installs build dependencies
     await exec.exec(`yum-builddep -y ${specFile.destFullPath}`);
@@ -72,7 +77,7 @@ async function run() {
     // Execute rpmbuild , -ba generates both RPMS and SPRMS
     try {
       await exec.exec(
-        `rpmbuild -ba ${specFile.destFullPath}`
+        `rpmbuild -ba ${specFile.destFullPath} ${additionalDefs}`
       );
     } catch (err) {
       core.setFailed(`action failed with error: ${err}`);
