@@ -56,6 +56,9 @@ async function run() {
     await exec.exec(`ln -s /github/home/rpmbuild/SOURCES/${name}-${version}.tar.gz /github/home/rpmbuild/SOURCES/${name}.tar.gz`);
     process.env.GIT_DIR = oldGitDir;
 
+
+    await exec.exec(`ls -alh /github/workspace/`);
+
     // Installs additional repositories
     const additionalRepos = core.getInput('additional_repos'); // user input, eg: '["centos-release-scl"]'
     let additionalDefs  = "";
