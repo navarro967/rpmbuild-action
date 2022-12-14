@@ -25,6 +25,8 @@ async function run() {
       srcFullPath: `/github/workspace/${configPath}`,
       destFullPath: `/github/home/rpmbuild/SPECS/${basename}`,
     };
+    
+    console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
 
     // Read spec file and get values 
     var data = fs.readFileSync(specFile.srcFullPath, 'utf8');
@@ -45,10 +47,8 @@ async function run() {
 
     // setup rpm tree
     await exec.exec('rpmdev-setuptree');
-    console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
     // Copy spec file from path specFile to /github/home/rpmbuild/SPECS/
-    await exec.exec(`cp ${specFile.srcFullPath} ${specFile.destFullPath}`);
-
+    
     // Make the code in /github/workspace/ into a tar.gz, located in /github/home/rpmbuild/SOURCES/
     const oldGitDir = process.env.GIT_DIR;
     process.env.GIT_DIR = '/github/workspace/.git';
