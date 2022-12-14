@@ -57,7 +57,7 @@ async function run() {
     process.env.GIT_DIR = oldGitDir;
 
 
-    await exec.exec(`ls -alh /github/workspace/`);
+    console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
 
     // Installs additional repositories
     const additionalRepos = core.getInput('additional_repos'); // user input, eg: '["centos-release-scl"]'
