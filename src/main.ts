@@ -51,33 +51,19 @@ async function run() {
 
     try {
       await exec.exec(
-        `cd ${specFile.destFullPath}; make build ${githubToken}`
+        `cd ${specFile.srcFullPath} && make build ${githubToken}`
       );
     } catch (err) {
       core.setFailed(`action failed with error: ${err}`);
     }
 
-    let myOutput = '';
-    await cp.exec('ls /github/home/rpmbuild/SRPMS/', (err, stdout, stderr) => {
-      if (err) {
-        //some err occurred
-        console.error(err)
-      } else {
-          // the *entire* stdout and stderr (buffered)
-          console.log(`stdout: ${stdout}`);
-          myOutput = myOutput+`${stdout}`.trim();
-          console.log(`stderr: ${stderr}`);
-        }
-      });
-
-
     // only contents of workspace can be changed by actions and used by subsequent actions 
     // So copy all generated rpms into workspace , and publish output path relative to workspace (/github/workspace)
-    await exec.exec(`mkdir -p rpmbuild/RPMS`);
+    //await exec.exec(`mkdir -p rpmbuild/RPMS`);
 
     //await cp.exec(`cp -R /github/home/rpmbuild/RPMS/. rpmbuild/RPMS/`)
 
-    await exec.exec(`ls -la rpmbuild/RPMS`);
+    //await exec.exec(`ls -la rpmbuild/RPMS`);
     
     // set outputs to path relative to workspace ex ./rpmbuild/
     core.setOutput("rpm_dir_path", `rpmbuild/RPMS/`);                      // path to RPMS directory
