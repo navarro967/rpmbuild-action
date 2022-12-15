@@ -1,10 +1,10 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const exec = require('@actions/exec');
-const io = require('@actions/io');
-const cp = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const core    = require('@actions/core');
+const github  = require('@actions/github');
+const exec    = require('@actions/exec');
+const io      = require('@actions/io');
+const cp      = require('child_process');
+const fs      = require('fs');
+const path    = require('path');
 
 async function run() {
   try {
@@ -76,7 +76,7 @@ async function run() {
     await exec.exec(`mkdir -p rpmbuild/RPMS`);
 
     //await cp.exec(`cp -R /github/home/rpmbuild/RPMS/. rpmbuild/RPMS/`)
-    
+
     await exec.exec(`ls -la rpmbuild/RPMS`);
     
     // set outputs to path relative to workspace ex ./rpmbuild/
