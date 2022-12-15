@@ -28,7 +28,7 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'registry.kaltura.io/library/rpmbuild-action:latest'
+  image: 'docker://registry.kaltura.io/library/rpmbuild-action:latest'
 
 branding:
   icon: 'package'
