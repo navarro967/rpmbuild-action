@@ -27,21 +27,17 @@ async function run() {
     const repo      = context.repo.repo
     const ref       = context.ref
     const cwd       = process.cwd();
-    const basename  = path.basename(inputs.make_path); // always just `foo.spec`
+    const basename  = path.basename(inputs.make_path);
 
     const makeFile            = {
       srcFullPath: `${cwd}/${inputs.make_path}`,
-      destFullPath: `/github/home/rpmbuild/SPECS/${basename}`,
+      destFullPath: `/github/workspace/RPMS`,
     };
-
-    console.log(process.cwd());
-    //console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
 
     const name        = inputs.github_token ? 'GITHUB_TOKEN='+inputs.github_token : "";
     const version     = inputs.github_token ? 'VERSION='+inputs.github_token : "";
     const release     = inputs.github_token ? 'RELEASE='+inputs.github_token : "";
     const githubToken = inputs.github_token ? 'GITHUB_TOKEN='+inputs.github_token : "";
-
 
     // Installs additional packages
     // user input, eg: '["centos-release-scl"]'
@@ -56,7 +52,6 @@ async function run() {
 
     process.chdir(makeFile.srcFullPath);
 
-    console.log(`${await exec.exec(`cat Makefile`)}`);
     try {
       await exec.exec(
         `make build ${version} ${release} ${githubToken} ${inputs.additional_definitions}`
@@ -65,21 +60,20 @@ async function run() {
       core.setFailed(`action failed with error: ${err}`);
     }
 
+    if(!fs.existsSync(makeFile.destFullPath)) {
+      fs.mkdirSync(makeFile.destFullPath);
+    }
+
+    const buildDir = fs.readdirSync(makeFile.destFullPath);
+    buildDir.forEach(rpm => {
+      if(path.extname(rpm) == ".rpm")
+        fs.renameSync(rpm, makeFile.destFullPath)
+    })
+
     process.chdir(cwd);
 
-    // only contents of workspace can be changed by actions and used by subsequent actions 
-    // So copy all generated rpms into workspace , and publish output path relative to workspace (/github/workspace)
-    //await exec.exec(`mkdir -p rpmbuild/RPMS`);
-
-    //await cp.exec(`cp -R /github/home/rpmbuild/RPMS/. rpmbuild/RPMS/`)
-
-    //await exec.exec(`ls -la rpmbuild/RPMS`);
-    
-    // set outputs to path relative to workspace ex ./rpmbuild/
-    core.setOutput("rpm_dir_path", `rpmbuild/RPMS/`);                      // path to RPMS directory
-    core.setOutput("rpm_content_type", "application/octet-stream");        // Content-type for Upload
-    
-
+    core.setOutput("rpm_dir_path", makeFile.destFullPath);          // path to RPMS directory
+    core.setOutput("rpm_content_type", "application/octet-stream"); // Content-type for Upload
 
   } catch (error) {
     core.setFailed(error.message);
