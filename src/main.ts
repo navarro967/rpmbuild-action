@@ -30,11 +30,12 @@ async function run() {
     const basename  = path.basename(inputs.make_path); // always just `foo.spec`
 
     const makeFile            = {
-      srcFullPath: `/github/workspace/${inputs.make_path}`,
+      srcFullPath: `${cwd}/${inputs.make_path}`,
       destFullPath: `/github/home/rpmbuild/SPECS/${basename}`,
     };
 
-    console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
+    console.log(process.cwd());
+    //console.log(`${await exec.exec("ls -alh /github/workspace/")}`);
 
     const name        = inputs.github_token ? 'GITHUB_TOKEN='+inputs.github_token : "";
     const version     = inputs.github_token ? 'VERSION='+inputs.github_token : "";
@@ -42,7 +43,7 @@ async function run() {
     const githubToken = inputs.github_token ? 'GITHUB_TOKEN='+inputs.github_token : "";
 
 
-    // Installs additional repositories
+    // Installs additional packages
     // user input, eg: '["centos-release-scl"]'
 
     if (inputs.additional_packages) {
