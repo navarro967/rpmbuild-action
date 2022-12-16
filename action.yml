@@ -3,15 +3,23 @@ description: 'Build RPMs from spec file and upload it as Artifact or Release Ass
 author: 'Naveenraj M'
 
 inputs: 
-  spec_file:
-    description: 'path to the spec file'
-    required: true
-    default: '*.spec'                     #Any spec file in top 
-  additional_repos:
-    description: 'A list of additional repositories to enable'
+  make_path:
+    description: 'The path to the Makefile'
+    required: true                     #Any spec file in top 
+  additional_packages:
+    description: 'A list of additional packages to install in the build container'
     required: false
   additional_definitions:
     description: 'A list of additional definitions to pass to the rpmbuild'
+    required: false
+  github_token:
+    description: 'A github token to pass to Make'
+    required: false
+  make_version:
+    description: 'Version string to pass to Make'
+    required: false
+  make_release:
+    description: 'Release string to pass to Make'
     required: false
 
 outputs:
