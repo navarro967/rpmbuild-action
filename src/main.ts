@@ -34,8 +34,8 @@ async function run() {
       destFullPath: `${cwd}/RPMS`,
     };
 
-    const version     = (inputs.github_token) ? 'VERSION='+inputs.make_version : "";
-    const release     = (inputs.github_token) ? 'RELEASE='+inputs.make_release : "";
+    const version     = (inputs.make_version) ? 'VERSION='+inputs.make_version : "";
+    const release     = (inputs.make_release) ? 'RELEASE='+inputs.make_release : "";
     const githubToken = (inputs.github_token) ? 'GITHUB_TOKEN='+inputs.github_token : "";
 
     // Installs additional packages
