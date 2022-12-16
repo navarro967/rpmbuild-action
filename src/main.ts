@@ -66,6 +66,7 @@ async function run() {
     const buildDir = fs.readdirSync(makeFile.destFullPath);
     buildDir.forEach(rpm => {
       if(path.extname(rpm) == ".rpm")
+        console.log("Staging RPM for publishing: " + rpm);
         fs.renameSync(rpm, makeFile.destFullPath)
     })
 
