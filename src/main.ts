@@ -31,7 +31,7 @@ async function run() {
 
     const makeFile            = {
       srcFullPath: `${cwd}/${inputs.make_path}`,
-      destFullPath: `/github/workspace/RPMS`,
+      destFullPath: `${cwd}/RPMS`,
     };
 
     const version     = inputs.github_token ? 'VERSION='+inputs.make_version : "";
